@@ -1,0 +1,231 @@
+29/9
+
+1.
+mainwindow.xaml
+
+<Window x:Class="WP5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WP5"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock x:Name="tb1" Text="hello world" Margin="0,0,0,15" Background="Beige" Foreground="Cornsilk"/>
+            <Button x:Name="btn_submit"/>
+            <PasswordBox x:Name="pwd" Width="150" Height="45" Margin="0,0,0,15" ToolTip="Enter your password here"/>
+        
+        
+            <StackPanel Orientation="Horizontal">
+                <RadioButton x:Name="rb1" Content="option1"/>
+                <RadioButton x:Name="rb2" Content="option2"/>
+            </StackPanel>
+                <CheckBox x:Name="cb1" Content="Aligible for vote" IsChecked="True" Margin="0,0,0,15"/>
+            <Slider x:Name="sldr" Minimum="0" Maximum="100" Value="30" Width="400" DragEnter="sldr_DragEnter" DragLeave="sldr_DragLeave"/>
+            <Calendar x:Name="cldr" SelectedDate="2006-01-31"/>
+            <DatePicker Name="dp1" SelectedDate="2025-01-31"/>
+            
+            
+        </StackPanel>
+    </ScrollViewer>
+</Window>
+
+
+mainwindow.xaml.cs
+
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WP5
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {   
+            InitializeComponent();
+            this.Title = tb1.Text;
+        }
+
+        private void sldr_DragEnter(object sender, DragEventArgs e)
+        {
+            
+        }
+        private void sldr_DragLeave(object sender, DragEventArgs e)
+        {
+
+        }
+
+        
+    }
+}
+
+2.
+mainwindow.xaml
+
+<Window x:Class="WP6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WP6"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <TextBlock x:Name="tb1" Text="{Binding Name}"/>
+        <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"/>
+        
+    </StackPanel>
+</Window>
+
+
+mw.cs
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WP6
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = new viewModel();
+        }
+    }
+}
+
+viewmodel.cs(class)
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WP6
+{
+	class viewModel : INotifyPropertyChanged
+	{
+		private String _Name;
+		public String Name
+		{
+			get => _Name;
+			set
+			{
+				_Name = value;
+				OnPropertyChanged(nameof(Name));
+			}
+		}
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string PropertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+        }	
+	}
+}
+
+3.
+mw.xaml
+
+<Window x:Class="WP6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WP6"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <TextBlock x:Name="tb1" Text="{Binding Name}"/>
+        <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Text="{Binding sldr_value,UpdateSourceTrigger=PropertyChanged}"/>
+        <Slider x:Name="sldr" Minimum="0" Maximum="100"  Value="{Binding sldr_value, UpdateSourceTrigger=PropertyChanged}" Width="400" />
+    </StackPanel>
+</Window>
+
+mw.cs
+
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WP6
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = new viewModel();
+        }
+
+        
+    }
+}
+
+viewmodel.cs
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WP6
+{
+	class viewModel : INotifyPropertyChanged
+	{
+		private int _sldr_value;
+
+		public int sldr_value
+		{
+			get { return _sldr_value; }
+			set
+			{
+				_sldr_value = value;
+				OnPropertyChanged(nameof(sldr_value));
+			}
+		}
+
+		public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string PropertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+        }	
+	}
+}
